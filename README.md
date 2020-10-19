@@ -6,7 +6,7 @@
   </a> 
    <a href="https://pub.dartlang.org/packages/metadata">  
     <img src="https://img.shields.io/pub/v/metadata.svg"  
-      alt="Pub Package" />  
+      alt="Pub Package" /> 
   </a>
    <a href="https://opensource.org/licenses/MIT">  
     <img src="https://img.shields.io/badge/License-MIT-red.svg"  
