@@ -2,19 +2,13 @@
   "configVersion": 2,
   "packages": [
     {
-      "name": "utf",
-      "rootUri": "file:///Users/kawal/.pub-cache/hosted/pub.dartlang.org/utf-0.9.0+5",
-      "packageUri": "lib/",
-      "languageVersion": "2.0"
-    },
-    {
       "name": "metadata",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.8"
     }
   ],
-  "generated": "2020-10-19T11:11:43.928703Z",
+  "generated": "2020-10-19T11:17:57.752271Z",
   "generator": "pub",
   "generatorVersion": "2.10.1"
 }
