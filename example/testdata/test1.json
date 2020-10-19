@@ -1,0 +1,86 @@
+{
+    "image": {
+        "ImageWidth": 4000,
+        "Model": "Redmi Note 7 Pro",
+        "ImageHeight": 3000,
+        "Orientation": 1,
+        "ModifyDate": "2020:10:15 10:05:19",
+        "YCbCrPositioning": 1,
+        "ExifOffset": 218,
+        "ResolutionUnit": 2,
+        "GPSInfo": 3075,
+        "XResolution": 72.0,
+        "YResolution": 72.0,
+        "Make": "Xiaomi"
+    },
+    "thumbnail": {
+        "ThumbnailOffset": 3211,
+        "Orientation": 1,
+        "ThumbnailLength": 17485,
+        "Compression": 6,
+        "ResolutionUnit": 2,
+        "XResolution": 72.0,
+        "YResolution": 72.0,
+        "ExifImageHeight": 240,
+        "ExifImageWidth": 320
+    },
+    "exif": {
+        "ISO": 112,
+        "ExposureProgram": 2,
+        "FNumber": 1.79,
+        "ExposureTime": 0.00045351473922902497,
+        "SensingMethod": 1,
+        "SubSecTimeDigitized": "398529",
+        "SubSecTimeOriginal": "398529",
+        "SubSecTime": "398529",
+        "FocalLength": 4.74,
+        "Flash": 16,
+        "LightSource": 21,
+        "MeteringMode": 2,
+        "SceneCaptureType": 0,
+        "InteropOffset": 3045,
+        "FocalLengthIn35mmFormat": 25,
+        "MaxApertureValue": 1.67,
+        "CreateDate": "2020:10:15 10:05:19",
+        "ExposureCompensation": 0.0,
+        "ExifImageHeight": 3000,
+        "WhiteBalance": 0,
+        "DateTimeOriginal": "2020:10:15 10:05:19",
+        "BrightnessValue": 7.57,
+        "ExifImageWidth": 4000,
+        "ExposureMode": 0,
+        "ApertureValue": 1.67,
+        "ComponentsConfiguration": [
+            1,
+            2,
+            3,
+            0
+        ],
+        "ColorSpace": 1,
+        "SceneType": 1,
+        "ShutterSpeedValue": 11.106,
+        "ExifVersion": [
+            48,
+            50,
+            50,
+            48
+        ],
+        "FlashpixVersion": [
+            48,
+            49,
+            48,
+            48
+        ]
+    },
+    "gps": {},
+    "interoperability": {
+        "InteropIndex": "R98",
+        "InteropVersion": [
+            48,
+            49,
+            48,
+            48
+        ]
+    },
+    "makernote": {}
+}
