@@ -40,8 +40,8 @@
   - [Installing](#lets-get-started)
   - [Usage](#usage)
     * [Imports](#imports)
-    * [Read xlsx file](#read-xlsx-file)
-    * [Read xlsx file from Asset Folder](#read-xlsx-from-flutters-asset-folder)
+    * [Read image file](#read-image-file)
+    * [Read image file from Asset Folder](#read-image-from-flutters-asset-folder)
     * [Extract Exif Data](#extract-exif-data)
     * [Extract Exif Data with callback](#extract-exif-data-with-callback)
     * [Saving Exif Content into File](#saving-exif-content-into-file)
@@ -85,7 +85,7 @@ Now in your `Dart` code, you can use:
     
 ````
 
-### Read XLSX File
+### Read Image File
 
 ````dart
     var file = "path_to_pre_existing_image_file/image.jpg";
@@ -93,7 +93,7 @@ Now in your `Dart` code, you can use:
     
 ````
 
-### Read XLSX from Flutter's Asset Folder
+### Read Image from Flutter's Asset Folder
 
 ````dart
     import 'package:flutter/services.dart' show ByteData, rootBundle;
