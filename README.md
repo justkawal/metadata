@@ -53,7 +53,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  metadata: ^1.1.5
+  metadata: ^1.0.0
 ```
 
 ### 2. Install it
