@@ -42,7 +42,9 @@
     * [Imports](#imports)
     * [Read xlsx file](#read-xlsx-file)
     * [Read xlsx file from Asset Folder](#read-xlsx-from-flutters-asset-folder)
-    * [Create xlsx file](#create-new-xlsx-file)
+    * [Extract Exif Data](#extract-exif-data)
+    * [Extract Exif Data with callback](#extract-exif-data-with-callback)
+    * [Saving Exif Content into File](#saving-exif-content-into-file)
   - [Upcoming Features](#features-coming-in-next-version)
   - [Donate (Be the First one)](#donate-be-the-first-one)
 
@@ -116,7 +118,7 @@ Now in your `Dart` code, you can use:
     
 ````
 
-### Extract Exif Data
+### Extract Exif Data with callback
     
 ````dart
     MetaData.exifData(bytes, onValue: (CallBack result) {
@@ -130,7 +132,6 @@ Now in your `Dart` code, you can use:
     
 ````
 
-   
 ### Saving exif content into File
 
 ````dart
