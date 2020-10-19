@@ -12,7 +12,6 @@ class MetaData {
   ///
   ///Normal Usage (Without Callback)
   ///
-  ///
   ///````
   /// CallBack result = MetaData.exifData(bytes);
   /// if (result.error == null) {

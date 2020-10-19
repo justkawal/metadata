@@ -8,7 +8,6 @@ part 'src/metadata.dart';
 ///
 ///Exif Part `START`
 ///
-
 part 'src/exif/exif.dart';
 
 // constants
@@ -28,7 +27,6 @@ part 'src/exif/maker_notes/fujifilm.dart';
 part 'src/exif/maker_notes/maker_notes_function.dart';
 part 'src/exif/maker_notes/sanyo.dart';
 part 'src/exif/maker_notes/olympus.dart';
-
 ///
 ///Exif Part `END`
 ///
