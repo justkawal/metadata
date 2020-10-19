@@ -41,5 +41,6 @@ void withCallBack() {
   });
 }
 
-void saveFile(String fileName, dynamic contents) =>
-    File('${path}$fileName.json').writeAsStringSync(jsonEncode(contents));
+void saveFile(String fileName, dynamic contents) {
+  File('${path}$fileName.json').writeAsStringSync(jsonEncode(contents));
+}
