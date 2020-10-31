@@ -111,7 +111,7 @@ Now in your `Dart` code, you can use:
     var result = MetaData.exifData(bytes);
     if (result.error == null) {
       var content = result.exifData; // exif data is available in contents
-      saveFile(image, content);
+      saveFile(image_name, content);
     } else {
       print('File: $image.jpg, Error: ${result.error}');
     }
@@ -124,11 +124,19 @@ Now in your `Dart` code, you can use:
     MetaData.exifData(bytes, onValue: (CallBack result) {
       if (result.error == null) {
         var content = result.exifData;
-        saveFile(image, content);
+        saveFile(image_name, content);
       } else {
         print('File: $image.jpg, Error: ${result.error}');
       }
     });
+    
+````
+### Extract XMP Data 
+    
+````dart
+    var mapResult = MetaData.extractXMP(bytes);
+    print(mapResult.toString());
+    saveFile(image_name, mapResult);
     
 ````
 
