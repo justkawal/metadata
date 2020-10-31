@@ -45,4 +45,21 @@ class MetaData {
     }
     return val;
   }
+
+  ///
+  ///Extract XMP data from image
+  ///````
+  /// var mapResult = MetaData.extractXMP(bytes);
+  /// print(mapResult.toString());
+  ///
+  ///````
+  static Map<String, dynamic> extractXMP(Uint8List bytes) {
+    var val;
+    try {
+      val = XMP.extract(bytes);
+    } catch (e) {
+      return Map<String, dynamic>.from({'error': e.toString()});
+    }
+    return val;
+  }
 }

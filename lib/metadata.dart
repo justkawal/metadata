@@ -3,6 +3,8 @@ library metadata;
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:xmp/xmp.dart';
+
 part 'src/metadata.dart';
 
 ///

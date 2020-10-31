@@ -46,7 +46,7 @@
     * [Extract Exif Data with callback](#extract-exif-data-with-callback)
     * [Saving Exif Content into File](#saving-exif-content-into-file)
   - [Upcoming Features](#features-coming-in-next-version)
-  - [Donate (Be the First one)](#donate-be-the-first-one)
+  - [Donate (Be the First one)](#donate)
 
 # Lets Get Started
 
@@ -55,7 +55,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  metadata: ^1.0.0
+  metadata: ^1.0.1
 ```
 
 ### 2. Install it
