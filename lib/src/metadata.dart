@@ -53,10 +53,10 @@ class MetaData {
   /// print(mapResult.toString());
   ///
   ///````
-  static Map<String, dynamic> extractXMP(Uint8List bytes,{bool raw = false}) {
+  static Map<String, dynamic> extractXMP(Uint8List bytes, {bool raw = false}) {
     var val;
     try {
-      val = XMP.extract(bytes,raw:raw);
+      val = XMP.extract(bytes, raw: raw);
     } catch (e) {
       return Map<String, dynamic>.from({'error': e.toString()});
     }
