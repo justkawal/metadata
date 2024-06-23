@@ -33,6 +33,10 @@
  
  [metadata](https://www.pub.dev/packages/metadata) is a dart library to extract exif data of the images.
 
+## [Support](https://www.paypal.me/justkawal) ❤️❤️
+#### Thanks for being kind and hitting the support button. Much Appreciated 🙌!!
+
+
 
 # Table of Contents
   - [Installing](#lets-get-started)
