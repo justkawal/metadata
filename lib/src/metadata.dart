@@ -37,11 +37,10 @@ class MetaData {
   ///
   ///````
   static CallBack exifData(Uint8List bytes,
-      {void Function(CallBack value) onValue}) {
+      {void Function(CallBack value)? onValue}) {
     var val = _Exif().exifData(bytes);
     if (onValue != null) {
       onValue(val);
-      return null;
     }
     return val;
   }

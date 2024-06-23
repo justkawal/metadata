@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/License-MIT-red.svg"  
       alt="License: MIT" />  
   </a>  
-   <a href="https://www.paypal.me/kawal7415">  
+   <a href="https://www.paypal.me/justkawal">
     <img src="https://img.shields.io/badge/Donate-PayPal-green.svg"  
       alt="Donate" />  
   </a>
@@ -32,9 +32,9 @@
   <br>
  
  [metadata](https://www.pub.dev/packages/metadata) is a dart library to extract exif data of the images.
- It is purely written in dart, So it can be used on server as well as on client.
 
-
+## [Support](https://www.paypal.me/justkawal) ❤️❤️
+#### Thanks for being kind and hitting the support button. Much Appreciated 🙌!!
 
 # Table of Contents
   - [Installing](#lets-get-started)
@@ -55,7 +55,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  metadata: ^1.0.2
+  metadata: any
 ```
 
 ### 2. Install it
@@ -98,7 +98,7 @@ Now in your `Dart` code, you can use:
 ````dart
     import 'package:flutter/services.dart' show ByteData, rootBundle;
     
-    /* Your blah blah code here */
+    /* Your awesome code here */
     
     ByteData data = await rootBundle.load("assets/path_to_pre_existing_image_file/image.jpg";);
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -148,19 +148,3 @@ Now in your `Dart` code, you can use:
       }
     
 ````
-
-## Features coming in next version
-On-going implementation for future:
-- metadata of audio and video files
-- extracting file-types
-
-#### Also checkout our other libraries: 
-  - Excel **·······**> [Excel](https://www.github.com/justkawal/excel)
-  - Protect **···············**> [Protect](https://www.github.com/justkawal/protect)
-  - Text Animations **··**> [AnimatedText](https://www.github.com/justkawal/animated_text)
-  - Translations **·······**> [Arb Translator](https://www.github.com/justkawal/arb_translator)
-
-### Donate
-Ooooops, My laptop is **slow**, but I'm not.
-  - [Paypal](https://www.paypal.me/kawal7415)
-  - Not having Paypal account ?? [Join Now](https://www.paypal.com/in/flref?refBy=Pzpaa7qp041602067472432) and both of us could earn **`$10`**

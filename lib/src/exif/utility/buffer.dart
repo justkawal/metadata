@@ -1,6 +1,6 @@
 part of metadata;
 
-int getByte(Uint8List buffer, int offset) {
+int? getByte(Uint8List buffer, int offset) {
   return offset < buffer.length ? buffer[offset] : null;
 }
 

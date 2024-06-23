@@ -1,7 +1,5 @@
 part of metadata;
 
-///var _DEFAULT_MAX_ENTRIES = 128;
-
 /// AGFA TAGS
 const _AGFA_TAGS = {
   0x0000: 'MakerNoteVersion',
@@ -414,7 +412,7 @@ var _OLYMPUS_TAGS = _AGFA_TAGS;
   0x5000: 'UnknownInfo'
 }; */
 
-var _SANYO_TAGS = {
+final _SANYO_TAGS = <int, Object>{
   0x00FF: 'MakerNoteOffset',
   0x0100: 'SanyoThumbnail',
   0x0200: 'SpecialMode',
@@ -444,7 +442,7 @@ var _SANYO_TAGS = {
   0x0F00: 'DataDump'
 };
 
-String _func(Map entry) {
+String? _func(Map entry) {
   switch (entry['format']) {
     case 0x0005:
       return 'ManualFocusDistance';
