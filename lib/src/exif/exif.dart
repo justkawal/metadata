@@ -1,9 +1,9 @@
 part of metadata;
 
 class _Exif {
-  String imageType;
+  late String imageType;
   bool _isBigEndian = false;
-  int _makernoteOffset;
+  int? _makernoteOffset;
 
   var _exifData = {
     'image': {},
@@ -16,7 +16,7 @@ class _Exif {
 
   CallBack exifData(Uint8List exif_buffer) {
     _init();
-    if (exif_buffer == null || exif_buffer.isEmpty) {
+    if (exif_buffer.isEmpty) {
       return CallBack(
           Exception(
               'You have to provide an image or exif_buffer, it is pretty hard to extract Exif data from nothing...'),
@@ -33,7 +33,7 @@ class _Exif {
   }
 
   void _init() {
-    imageType = _makernoteOffset = null;
+    _makernoteOffset = null;
     _isBigEndian = false;
     _exifData = {
       'image': {},
@@ -136,7 +136,7 @@ class _Exif {
         var value = (exifEntry.value is List && exifEntry.value.length == 1)
             ? exifEntry.value[0]
             : exifEntry.value;
-        _exifData['image'][exifEntry.tagName] = value;
+        _exifData['image']![exifEntry.tagName] = value;
       }
     }
 
@@ -158,7 +158,7 @@ class _Exif {
           var value = (exifEntry.value is List && exifEntry.value.length == 1)
               ? exifEntry.value[0]
               : exifEntry.value;
-          _exifData['thumbnail'][exifEntry.tagName] = value;
+          _exifData['thumbnail']![exifEntry.tagName] = value;
         }
       }
     }
@@ -168,8 +168,8 @@ class _Exif {
     // Look for a pointer to the Exif IFD in IFD0 and extract information from
     // it if available
     if (_exifData['image'] != null &&
-        _exifData['image'][_ExifImageTAGS.exif[0x8769]] != null) {
-      ifdOffset = tiffOffset + _exifData['image'][_ExifImageTAGS.exif[0x8769]];
+        _exifData['image']![_ExifImageTAGS.exif[0x8769]] != null) {
+      ifdOffset = tiffOffset + _exifData['image']![_ExifImageTAGS.exif[0x8769]];
       numberOfEntries = getShort(data, ifdOffset, _isBigEndian);
 
       // Each IFD entry consists of 12 bytes which we loop through and extract
@@ -181,7 +181,7 @@ class _Exif {
           var value = (exifEntry.value is List && exifEntry.value.length == 1)
               ? exifEntry.value[0]
               : exifEntry.value;
-          _exifData['exif'][exifEntry.tagName] = value;
+          _exifData['exif']![exifEntry.tagName] = value;
         }
       }
     }
@@ -192,9 +192,9 @@ class _Exif {
     // it if available
     var t = _ExifImageTAGS.exif[0x8825];
     var gpsifdOffset =
-        _exifData['image'] == null ? null : _exifData['image'][t];
+        _exifData['image'] == null ? null : _exifData['image']![t];
     if (gpsifdOffset != null && gpsifdOffset > 0) {
-      ifdOffset = tiffOffset + _exifData['image'][t];
+      ifdOffset = tiffOffset + _exifData['image']![t];
       numberOfEntries = getShort(data, ifdOffset, _isBigEndian);
 
       // Each IFD entry consists of 12 bytes which we loop through and extract
@@ -206,7 +206,7 @@ class _Exif {
           var value = (exifEntry.value is List && exifEntry.value.length == 1)
               ? exifEntry.value[0]
               : exifEntry.value;
-          _exifData['gps'][exifEntry.tagName] = value;
+          _exifData['gps']![exifEntry.tagName] = value;
         }
       }
     }
@@ -216,8 +216,8 @@ class _Exif {
     // Look for a pointer to the interoperatbility IFD in the Exif IFD and
     // extract information from it if available
     if (_exifData['exif'] != null &&
-        _exifData['exif'][_ExifImageTAGS.exif[0xA005]] != null) {
-      ifdOffset = tiffOffset + _exifData['exif'][_ExifImageTAGS.exif[0xA005]];
+        _exifData['exif']![_ExifImageTAGS.exif[0xA005]] != null) {
+      ifdOffset = tiffOffset + _exifData['exif']![_ExifImageTAGS.exif[0xA005]];
       numberOfEntries = getShort(data, ifdOffset, _isBigEndian);
 
       // Each IFD entry consists of 12 bytes which we loop through and extract
@@ -229,7 +229,7 @@ class _Exif {
           var value = (exifEntry.value is List && exifEntry.value.length == 1)
               ? exifEntry.value[0]
               : exifEntry.value;
-          _exifData['interoperability'][exifEntry.tagName] = value;
+          _exifData['interoperability']![exifEntry.tagName] = value;
         }
       }
     }
@@ -242,52 +242,44 @@ class _Exif {
 
     // check explicitly for the getString method in case somehow this isn't
     // a buffer. Found this in an image in the wild
-    var makerNoteValue1 = _exifData['exif'][_ExifImageTAGS.exif[0x927C]];
-    if (makerNoteValue1 != null) {
-      Uint8List makerNoteValue;
+    var makerNoteValue1 = _exifData['exif']![_ExifImageTAGS.exif[0x927C]];
+    if (makerNoteValue1 != null && makerNoteValue1 is String) {
+      final Uint8List makerNoteValue = utf8.encode(makerNoteValue1);
 
-      if (makerNoteValue1.runtimeType is String) {
-        makerNoteValue = utf8.encode(makerNoteValue1);
+      late Function extractMakernotes;
+
+      // Check the header to see what kind of Makernote we are dealing with
+      if (utf8.decode(makerNoteValue.sublist(0, 7)) == 'OLYMP\x00\x01' ||
+          utf8.decode(makerNoteValue.sublist(0, 7)) == 'OLYMP\x00\x02') {
+        extractMakernotes = _extractMakerNotesOlympus;
+      } else if (utf8.decode(makerNoteValue.sublist(0, 7)) == 'AGFA \x00\x01') {
+        extractMakernotes = _extractMakerNotesAgfa;
+      } else if (utf8.decode(makerNoteValue.sublist(0, 8)) ==
+          'EPSON\x00\x01\x00') {
+        extractMakernotes = _extractMakerNotesEpson;
+      } else if (utf8.decode(makerNoteValue.sublist(0, 8)) == 'FUJIFILM') {
+        extractMakernotes = _extractMakerNotesFujiFilm;
+      } else if (utf8.decode(makerNoteValue.sublist(0, 5)) == 'SANYO') {
+        extractMakernotes = _extractMakerNotesSanyo;
+      } else {
+        // Makernotes are available but the format is not recognized so
+        // an error message is added instead, this ain't the best
+        // solution but should do for now
+        _exifData['makernote']!['error'] =
+            'Unable to extract Makernote information as it is in an unsupported or unrecognized format.';
       }
 
-      if (makerNoteValue.runtimeType is Uint8List) {
-        Function extractMakernotes;
-
-        // Check the header to see what kind of Makernote we are dealing with
-        if (utf8.decode(makerNoteValue.sublist(0, 7)) == 'OLYMP\x00\x01' ||
-            utf8.decode(makerNoteValue.sublist(0, 7)) == 'OLYMP\x00\x02') {
-          extractMakernotes = _extractMakerNotesOlympus;
-        } else if (utf8.decode(makerNoteValue.sublist(0, 7)) ==
-            'AGFA \x00\x01') {
-          extractMakernotes = _extractMakerNotesAgfa;
-        } else if (utf8.decode(makerNoteValue.sublist(0, 8)) ==
-            'EPSON\x00\x01\x00') {
-          extractMakernotes = _extractMakerNotesEpson;
-        } else if (utf8.decode(makerNoteValue.sublist(0, 8)) == 'FUJIFILM') {
-          extractMakernotes = _extractMakerNotesFujiFilm;
-        } else if (utf8.decode(makerNoteValue.sublist(0, 5)) == 'SANYO') {
-          extractMakernotes = _extractMakerNotesSanyo;
-        } else {
-          // Makernotes are available but the format is not recognized so
-          // an error message is added instead, this ain't the best
-          // solution but should do for now
-          _exifData['makernote']['error'] =
-              'Unable to extract Makernote information as it is in an unsupported or unrecognized format.';
-        }
-
-        if (_exifData['makernote']['error'] == null) {
-          _exifData['makernote'] =
-              extractMakernotes(data, self._makernoteOffset, tiffOffset);
-        }
+      if (_exifData['makernote']!['error'] == null) {
+        _exifData['makernote'] =
+            extractMakernotes(data, self._makernoteOffset, tiffOffset);
       }
     }
 
     return _exifData;
   }
 
-  _Entry _extractExifEntry(Uint8List data, int entryOffset, int tiffOffset,
+  _Entry? _extractExifEntry(Uint8List data, int entryOffset, int tiffOffset,
       bool _isBigEndian, Map<int, Object> tags) {
-    var self = this;
     var entry = _Entry(
         data.sublist(entryOffset, entryOffset + 2),
         null,
@@ -300,11 +292,10 @@ class _Exif {
     entry.tagId = getShort(entry.tag, 0, _isBigEndian);
 
     // The tagId may correspond to more then one tagName so check which
-    if (tags != null &&
-        entry.tagId != null &&
+    if (entry.tagId != null &&
         tags[entry.tagId] != null &&
         tags[entry.tagId] == 'Closure \'main_closure\'') {
-      Function customFunction = tags[entry.tagId];
+      Function customFunction = tags[entry.tagId]! as Function;
       entry.tagName = customFunction(entry);
 
       if (entry.tagName == null) {
@@ -312,8 +303,8 @@ class _Exif {
       }
 
       // The tagId corresponds to exactly one tagName
-    } else if (tags != null && tags[entry.tagId] != null) {
-      entry.tagName = tags[entry.tagId];
+    } else if (tags[entry.tagId] != null) {
+      entry.tagName = tags[entry.tagId]! as String;
 
       // The tagId is not recognized
     } else {
@@ -330,12 +321,9 @@ class _Exif {
         entry.valueOffset = (entry.components <= 4)
             ? entryOffset + 8
             : getLong(data, entryOffset + 8, _isBigEndian) + tiffOffset;
-
-        var elements = List<dynamic>(entry.components);
-        for (var i = 0; i < entry.components; i++) {
-          elements[i] = getByte(data, entry.valueOffset + i);
-        }
-        entry.value = elements;
+        entry.value = List.generate(entry.components, (i) {
+          return getByte(data, entry.valueOffset! + i);
+        });
         break;
 
       case 0x0002: // ascii strings, 1 byte per component
@@ -345,7 +333,7 @@ class _Exif {
         var entryValue = List<int>.from(data);
 
         entry.value =
-            entryValue.convertToString(entry.valueOffset, entry.components);
+            entryValue.convertToString(entry.valueOffset!, entry.components);
         if (entry.value[entry.value.length - 1] == '\u0000') {
           // Trim null terminated strings
           entry.value = entry.value.substring(0, entry.value.length - 1);
@@ -356,47 +344,40 @@ class _Exif {
         entry.valueOffset = (entry.components <= 2)
             ? entryOffset + 8
             : getLong(data, entryOffset + 8, _isBigEndian) + tiffOffset;
-        var elements = List<dynamic>(entry.components);
-        for (var i = 0; i < entry.components; i++) {
-          elements[i] = getShort(data, entry.valueOffset + i * 2, _isBigEndian);
-        }
-        entry.value = elements;
+
+        entry.value = List.generate(entry.components, (i) {
+          return getShort(data, entry.valueOffset! + i * 2, _isBigEndian);
+        });
+        ;
         break;
 
       case 0x0004: // unsigned long, 4 byte per component
         entry.valueOffset = (entry.components == 1)
             ? entryOffset + 8
             : getLong(data, entryOffset + 8, _isBigEndian) + tiffOffset;
-        var elements = List(entry.components);
-        for (var i = 0; i < entry.components; i++) {
-          elements[i] = getLong(data, entry.valueOffset + i * 4, _isBigEndian);
-        }
-        entry.value = elements;
+
+        entry.value = List.generate(entry.components, (i) {
+          return getLong(data, entry.valueOffset! + i * 4, _isBigEndian);
+        });
         break;
 
       case 0x0005: // unsigned rational, 8 byte per component (4 byte numerator and 4 byte denominator)
         entry.valueOffset =
             getLong(data, entryOffset + 8, _isBigEndian) + tiffOffset;
 
-        var elements = List<dynamic>(entry.components);
-        for (var i = 0; i < entry.components; i++) {
-          elements[i] =
-              (getLong(data, entry.valueOffset + i * 8, _isBigEndian) /
-                  getLong(data, entry.valueOffset + i * 8 + 4, _isBigEndian));
-        }
-        entry.value = elements;
+        entry.value = List.generate(entry.components, (i) {
+          return (getLong(data, entry.valueOffset! + i * 8, _isBigEndian) /
+              getLong(data, entry.valueOffset! + i * 8 + 4, _isBigEndian));
+        });
         break;
 
       case 0x0006: // signed byte, 1 byte per component
         entry.valueOffset = (entry.components <= 4)
             ? entryOffset + 8
             : getLong(data, entryOffset + 8, _isBigEndian) + tiffOffset;
-
-        var elements = List<dynamic>(entry.components);
-        for (var i = 0; i < entry.components; i++) {
-          elements[i] = getSignedByte(data, entry.valueOffset + i);
-        }
-        entry.value = elements;
+        entry.value = List.generate(entry.components, (i) {
+          return getSignedByte(data, entry.valueOffset! + i);
+        });
         break;
 
       case 0x0007: // undefined, 1 byte per component
@@ -406,7 +387,7 @@ class _Exif {
 
         var elements = <dynamic>[];
         elements.addAll(data.sublist(
-            entry.valueOffset, entry.valueOffset + entry.components));
+            entry.valueOffset!, entry.valueOffset! + entry.components));
         entry.value = elements;
         break;
 
@@ -414,44 +395,37 @@ class _Exif {
         entry.valueOffset = (entry.components <= 2)
             ? entryOffset + 8
             : getLong(data, entryOffset + 8, _isBigEndian) + tiffOffset;
-
-        var elements = List<dynamic>(entry.components);
-        for (var i = 0; i < entry.components; i++) {
-          elements[i] =
-              getSignedShort(data, entry.valueOffset + i * 2, _isBigEndian);
-        }
-        entry.value = elements;
+        entry.value = List.generate(entry.components, (i) {
+          return getSignedShort(data, entry.valueOffset! + i * 2, _isBigEndian);
+        });
         break;
 
       case 0x0009: // signed long, 4 byte per component
         entry.valueOffset = (entry.components == 1)
             ? entryOffset + 8
             : getLong(data, entryOffset + 8, _isBigEndian) + tiffOffset;
-        var elements = List<dynamic>(entry.components);
-        for (var i = 0; i < entry.components; i++) {
-          elements[i] =
-              (getSignedLong(data, entry.valueOffset + i * 4, _isBigEndian));
-        }
-        entry.value = elements;
+        entry.value = List.generate(entry.components, (i) {
+          return (getSignedLong(
+              data, entry.valueOffset! + i * 4, _isBigEndian));
+        });
         break;
 
       case 0x000A: // signed rational, 8 byte per component (4 byte numerator and 4 byte denominator)
         entry.valueOffset =
             getLong(data, entryOffset + 8, _isBigEndian) + tiffOffset;
-        var elements = List<dynamic>(entry.components);
-        for (var i = 0; i < entry.components; i++) {
-          elements[i] = (getSignedLong(
-                  data, entry.valueOffset + i * 8, _isBigEndian) /
-              getSignedLong(data, entry.valueOffset + i * 8 + 4, _isBigEndian));
-        }
-        entry.value = elements;
+        entry.value = List<double>.generate(entry.components, (i) {
+          return (getSignedLong(
+                  data, entry.valueOffset! + i * 8, _isBigEndian) /
+              getSignedLong(
+                  data, entry.valueOffset! + i * 8 + 4, _isBigEndian));
+        });
         break;
       default:
         return null;
     }
 
     // If this is the Makernote tag save its offset for later use
-    if (entry.tagName == 'MakerNote') self._makernoteOffset = entry.valueOffset;
+    if (entry.tagName == 'MakerNote') this._makernoteOffset = entry.valueOffset;
 
     return entry;
   }

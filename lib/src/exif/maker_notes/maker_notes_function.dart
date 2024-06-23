@@ -1,7 +1,7 @@
 part of metadata;
 
 Map _makerNotFunction(Uint8List data, int makernoteOffset, int tiffOffset,
-    _Exif metadataReference, Map<int, String> tags) {
+    _Exif metadataReference, Map<int, Object> tags) {
   var makernoteData = {};
 
   // Agfa flavored Makernote data starts after eight bytes

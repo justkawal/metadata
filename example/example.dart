@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'package:metadata/metadata.dart';
 import 'dart:io';
 
-const path = '/Users/kawal/Desktop/metadata/example/testdata/';
+import 'package:metadata/metadata.dart';
+
+const path = './example/testdata/';
 const images = [
   'test1',
   'test2',
@@ -10,6 +11,27 @@ const images = [
 void main() {
   withCallBack();
   withNormalUsage();
+}
+
+void matchTwoFiles() {
+  images.forEach((imageName) {
+    final file_generated = File('${path}$imageName-generated.json');
+    final file_original = File('${path}$imageName.json');
+
+    // match the 2 json files
+    if (file_generated.existsSync() && file_original.existsSync()) {
+      final generated = jsonDecode(file_generated.readAsStringSync());
+      final original = jsonDecode(file_original.readAsStringSync());
+
+      if (generated.toString() == original.toString()) {
+        print('The files are the same');
+      } else {
+        print('The files are different');
+      }
+    } else {
+      print('One of the files does not exist');
+    }
+  });
 }
 
 void withNormalUsage() {
@@ -42,5 +64,6 @@ void withCallBack() {
 }
 
 void saveFile(String fileName, dynamic contents) {
-  File('${path}$fileName.json').writeAsStringSync(jsonEncode(contents));
+  File('${path}$fileName-generated.json')
+      .writeAsStringSync(jsonEncode(contents));
 }

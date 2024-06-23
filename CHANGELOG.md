@@ -1,9 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Future Updates coming soon]
-- metadata of audio and video files
-- extracting file-types
+## [2.0.0] - 2024-06-23
+### Version change
+- Null-Safety support
 
 ## [1.0.2] - 2020-11-03
 ### Version change
